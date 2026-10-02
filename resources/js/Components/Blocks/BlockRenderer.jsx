@@ -21,6 +21,7 @@ import UniqueExperiencesBlock from './UniqueExperiencesBlock';
 import CareRoleGridBlock from './CareRoleGridBlock';
 import OfficeLocationsBlock from './OfficeLocationsBlock';
 import GoogleMapBlock from './GoogleMapBlock';
+import ClientLogosBlock from './ClientLogosBlock';
 
 const blockMap = {
     hero_banner: HeroBannerBlock,
@@ -44,6 +45,7 @@ const blockMap = {
     custom_html: CustomHtmlBlock,
     office_locations: OfficeLocationsBlock,
     google_map: GoogleMapBlock,
+    client_logos: ClientLogosBlock,
 };
 
 export default function BlockRenderer({ blocks }) {

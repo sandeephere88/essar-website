@@ -12,8 +12,8 @@ export default function SeoHead({
     const { businessProfile } = usePage().props;
 
     // Resolve details from either seoMeta object or direct props
-    const resolvedTitle = seoMeta?.meta_title || title || businessProfile?.name || 'finecare247';
-    const resolvedDescription = seoMeta?.meta_description || description || businessProfile?.tagline || 'Delivering exceptional services with quality, innovation, and expertise.';
+    const resolvedTitle = seoMeta?.meta_title || title || businessProfile?.name || 'Essar Techins';
+    const resolvedDescription = seoMeta?.meta_description || description || businessProfile?.tagline || 'Leading manufacturer of industrial Copra Dryers, Oil Expellers, and processing machinery.';
     const resolvedKeywords = seoMeta?.meta_keywords || keywords || 'services, business, team, company';
     
     // Resolve Canonical URL (fallback to current window location)

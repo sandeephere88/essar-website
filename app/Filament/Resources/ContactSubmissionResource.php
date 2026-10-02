@@ -84,13 +84,13 @@ class ContactSubmissionResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('role')
-                    ->label('Role')
+                    ->label('Inquiry Type')
                     ->formatStateUsing(fn ($state) => ContactRole::tryFrom($state ?? '')?->label() ?? ($state ? ucfirst(str_replace('_', ' ', $state)) : 'General'))
                     ->badge()
                     ->color(fn ($state) => match ($state) {
-                        'health_care_organization' => 'info',
-                        'professional_looking_for_work' => 'success',
-                        'staffing_agency', 'others' => 'warning',
+                        'business_inquiry', 'health_care_organization' => 'info',
+                        'technical_support', 'professional_looking_for_work' => 'success',
+                        'others', 'staffing_agency' => 'warning',
                         default => 'gray',
                     }),
 

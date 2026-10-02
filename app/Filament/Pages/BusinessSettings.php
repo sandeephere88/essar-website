@@ -15,6 +15,7 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -237,6 +238,36 @@ class BusinessSettings extends Page implements HasForms
                                             ->label('Button URL')
                                             ->placeholder('https://portal.example.com/login')
                                             ->maxLength(500),
+                                    ]),
+                            ]),
+
+                        /* ── YouTube Block ──────────────────────── */
+                        Tabs\Tab::make('YouTube Block')
+                            ->icon('heroicon-o-video-camera')
+                            ->schema([
+                                Section::make('Homepage YouTube Block Settings')
+                                    ->description('Configure the YouTube channel / video iframe block displayed above the homepage footer.')
+                                    ->schema([
+                                        Toggle::make('custom_attributes.show_youtube_block')
+                                            ->label('Show YouTube Block on Homepage')
+                                            ->default(true)
+                                            ->helperText('Enable or disable the YouTube channel section on the homepage.'),
+
+                                        TextInput::make('custom_attributes.youtube_block_title')
+                                            ->label('Block Title')
+                                            ->placeholder('Watch Our Latest Videos & Machinery Demos')
+                                            ->maxLength(255),
+
+                                        TextInput::make('custom_attributes.youtube_block_subtitle')
+                                            ->label('Block Subtitle')
+                                            ->placeholder('Subscribe to our YouTube channel to see copra dryers, oil mills, and industrial machinery in action.')
+                                            ->maxLength(500),
+
+                                        Textarea::make('custom_attributes.youtube_embed_url')
+                                            ->label('YouTube Embed URL / iframe src')
+                                            ->rows(2)
+                                            ->placeholder('https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID or https://www.youtube.com/embed/VIDEO_ID')
+                                            ->helperText('Paste a YouTube embed URL (e.g., https://www.youtube.com/embed/VIDEO_ID or channel embed URL). If left blank, it will use the YouTube link from Social Links or a default channel video.'),
                                     ]),
                             ]),
 

@@ -107,32 +107,38 @@ class HomeController extends Controller
             ]);
 
         // ── Home Page CMS Blocks ─────────────────────────────────────────────
-        $homePage = \App\Models\Page::where('slug', 'home')->first();
+        $homePage = \App\Models\Page::with('seoMeta')->where('slug', 'home')->first();
+        $hydratedBlocks = [];
         $uniqueExperiencesBlock = null;
         $careRoleBlock = null;
-        if ($homePage && is_array($homePage->blocks)) {
-            foreach ($homePage->blocks as $block) {
-                if (($block['type'] ?? '') === 'unique_experiences') {
-                    $data = $block['data'] ?? [];
-                    if (!empty($data['image'])) {
-                        $data['image_url'] = filter_var($data['image'], FILTER_VALIDATE_URL)
-                            ? $data['image']
-                            : asset('storage/' . $data['image']);
+
+        if ($homePage) {
+            $hydratedBlocks = \App\Http\Controllers\PageController::hydrateBlocks($homePage->blocks);
+
+            if (is_array($homePage->blocks)) {
+                foreach ($homePage->blocks as $block) {
+                    if (($block['type'] ?? '') === 'unique_experiences') {
+                        $data = $block['data'] ?? [];
+                        if (!empty($data['image'])) {
+                            $data['image_url'] = filter_var($data['image'], FILTER_VALIDATE_URL)
+                                ? $data['image']
+                                : asset('storage/' . $data['image']);
+                        }
+                        $uniqueExperiencesBlock = $data;
                     }
-                    $uniqueExperiencesBlock = $data;
-                }
-                if (($block['type'] ?? '') === 'care_role_grid') {
-                    $data = $block['data'] ?? [];
-                    if (!empty($data['roles']) && is_array($data['roles'])) {
-                        foreach ($data['roles'] as &$r) {
-                            if (!empty($r['image'])) {
-                                $r['image_url'] = filter_var($r['image'], FILTER_VALIDATE_URL)
-                                    ? $r['image']
-                                    : asset('storage/' . $r['image']);
+                    if (($block['type'] ?? '') === 'care_role_grid') {
+                        $data = $block['data'] ?? [];
+                        if (!empty($data['roles']) && is_array($data['roles'])) {
+                            foreach ($data['roles'] as &$r) {
+                                if (!empty($r['image'])) {
+                                    $r['image_url'] = filter_var($r['image'], FILTER_VALIDATE_URL)
+                                        ? $r['image']
+                                        : asset('storage/' . $r['image']);
+                                }
                             }
                         }
+                        $careRoleBlock = $data;
                     }
-                    $careRoleBlock = $data;
                 }
             }
         }
@@ -146,6 +152,13 @@ class HomeController extends Controller
             'accreditations'         => $accreditations,
             'uniqueExperiencesBlock' => $uniqueExperiencesBlock,
             'careRoleBlock'          => $careRoleBlock,
+            'page'                   => $homePage ? [
+                'title'      => $homePage->title,
+                'content'    => $homePage->content,
+                'hero_image' => $homePage->hero_image ? asset('storage/' . $homePage->hero_image) : null,
+                'blocks'     => $hydratedBlocks,
+                'seo_meta'   => $homePage->seoMeta,
+            ] : null,
         ]);
     }
 }

@@ -5,6 +5,8 @@ import SeoHead from '@/Components/SeoHead';
 import ProductCard from '@/Components/ProductCard';
 import { storageUrl } from '@/Utils/asset';
 
+import BlockRenderer from '@/Components/Blocks/BlockRenderer';
+
 /* ── Tiny helpers ─────────────────────────────────────────────── */
 function Badge({ children }) {
     return (
@@ -152,7 +154,7 @@ function HeroSlider({ banners }) {
 }
 
 /* ── Main Component ───────────────────────────────────────────── */
-export default function Home({ heroBanners = [], categories = [], featuredProducts = [], blogs = [], testimonials = [], accreditations = [] }) {
+export default function Home({ heroBanners = [], categories = [], featuredProducts = [], blogs = [], testimonials = [], accreditations = [], page = null }) {
     const { businessProfile } = usePage().props;
     const profile = businessProfile;
 
@@ -161,7 +163,7 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
         '@type': 'LocalBusiness',
         'name': 'Essar Techins',
         'telephone': profile?.phone_numbers?.[0]?.number || '+91 98470 00000',
-        'email': profile?.email || 'info@essartechins.co.in',
+        'email': profile?.email || 'mep@essartechins.com',
         'address': {
             '@type': 'PostalAddress',
             'streetAddress': 'Aluva',
@@ -174,6 +176,8 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
         'description': 'Leading manufacturer of Copra Dryers, Oil Processing Plants, Expellers, Filter Presses & Industrial Boilers in India.'
     };
 
+    const hasCmsBlocks = page?.blocks && Array.isArray(page.blocks) && page.blocks.length > 0;
+
     return (
         <AppLayout>
             <Head>
@@ -182,8 +186,11 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
                 </script>
             </Head>
 
-            <SeoHead title="Essar Techins — Industrial Machinery Manufacturer"
-                description="Leading manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses & Industrial Boilers. Based in Aluva, Kerala, India. Est. 2000." />
+            <SeoHead 
+                seoMeta={page?.seo_meta}
+                title="Essar Techins — Industrial Machinery Manufacturer"
+                description="Leading manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses & Industrial Boilers. Based in Aluva, Kerala, India. Est. 2000." 
+            />
 
             {/* ── HERO ─────────────────────────────────────────────── */}
             <HeroSlider banners={heroBanners} />
@@ -475,6 +482,104 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
                     </div>
                 </div>
             </section>
+
+            {/* ── YOUTUBE CHANNEL BLOCK ────────────────────────────── */}
+            {(() => {
+                const customAttrs = profile?.custom_attributes || {};
+                const showYouTubeBlock = customAttrs.show_youtube_block ?? true;
+                if (!showYouTubeBlock) return null;
+
+                const youtubeTitle = customAttrs.youtube_block_title;
+                const youtubeSubtitle = customAttrs.youtube_block_subtitle;
+                const youtubeChannelUrl = profile?.social_links?.youtube;
+                let rawEmbed = customAttrs.youtube_embed_url?.trim();
+
+                let embedSrc = '';
+                if (rawEmbed) {
+                    if (rawEmbed.includes('<iframe')) {
+                        const match = rawEmbed.match(/src=["']([^"']+)["']/);
+                        embedSrc = match ? match[1] : '';
+                    } else if (rawEmbed.includes('youtube.com/watch?v=')) {
+                        const videoId = rawEmbed.split('v=')[1]?.split('&')[0];
+                        embedSrc = `https://www.youtube.com/embed/${videoId}`;
+                    } else if (rawEmbed.includes('youtu.be/')) {
+                        const videoId = rawEmbed.split('youtu.be/')[1]?.split('?')[0];
+                        embedSrc = `https://www.youtube.com/embed/${videoId}`;
+                    } else {
+                        embedSrc = rawEmbed;
+                    }
+                }
+
+                // Fallback if no custom embed URL was provided
+                if (!embedSrc) {
+                    if (youtubeChannelUrl) {
+                        if (youtubeChannelUrl.includes('youtube.com/watch?v=')) {
+                            const videoId = youtubeChannelUrl.split('v=')[1]?.split('&')[0];
+                            embedSrc = `https://www.youtube.com/embed/${videoId}`;
+                        } else {
+                            embedSrc = 'https://www.youtube.com/embed?listType=user_uploads';
+                        }
+                    } else {
+                        embedSrc = 'https://www.youtube.com/embed?listType=user_uploads';
+                    }
+                }
+
+                return (
+                    <section className="py-10 sm:py-14 bg-[#091831] text-white border-t border-white/10 relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-10 pointer-events-none"
+                            style={{ backgroundImage: 'radial-gradient(circle, #F59E0B 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+                        <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+                            <div className="text-center mb-6">
+                                <div className="mb-2 flex justify-center">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/15 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase tracking-widest">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                        YouTube Channel
+                                    </span>
+                                </div>
+                                <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+                                    {youtubeTitle ? youtubeTitle : <>Watch Us On <span className="text-red-500">YouTube</span></>}
+                                </h2>
+                                <p className="mt-2 text-xs sm:text-sm text-white/65 max-w-lg leading-relaxed mx-auto">
+                                    {youtubeSubtitle || 'Explore our Copra Dryers, Oil Mill Expellers & Industrial Machinery in action.'}
+                                </p>
+                            </div>
+
+                            <div className="max-w-2xl mx-auto">
+                                <div className="relative w-full rounded-xl overflow-hidden shadow-xl border border-white/15 bg-black aspect-video">
+                                    <iframe
+                                        src={embedSrc}
+                                        title="Essar Techins YouTube Channel"
+                                        className="absolute inset-0 w-full h-full border-0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowFullScreen
+                                    />
+                                </div>
+
+                                {youtubeChannelUrl && (
+                                    <div className="mt-5 text-center">
+                                        <a
+                                            href={youtubeChannelUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2.5 rounded-lg shadow-md shadow-red-600/30 transition-all hover:scale-[1.02] text-xs"
+                                        >
+                                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                                <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z" />
+                                            </svg>
+                                            Subscribe on YouTube
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+                );
+            })()}
+
+            {/* ── CMS DYNAMIC PAGE BUILDER BLOCKS ──────────────────── */}
+            {hasCmsBlocks && (
+                <BlockRenderer blocks={page.blocks} />
+            )}
 
         </AppLayout>
     );

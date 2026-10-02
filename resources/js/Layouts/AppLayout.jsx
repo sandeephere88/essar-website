@@ -83,11 +83,21 @@ export default function AppLayout({ children }) {
                 <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 h-[64px] sm:h-[72px]">
 
                     {/* Logo */}
-                    <Link href={route('home')} className="flex items-center gap-2.5 shrink-0 group">
+                    <Link href={route('home')} className="flex items-center gap-3 shrink-0 group">
                         {profile?.logo && !logoError ? (
-                            <img src={storageUrl(profile.logo)} alt={name}
-                                className="h-10 sm:h-11 w-auto object-contain max-w-[200px]"
-                                onError={() => setLogoError(true)} />
+                            <div className="flex items-center gap-3">
+                                <img src={storageUrl(profile.logo)} alt={name}
+                                    className="h-10 sm:h-11 w-auto object-contain max-w-[180px]"
+                                    onError={() => setLogoError(true)} />
+                                <div className="leading-tight">
+                                    <span className="block text-[16px] sm:text-[17.5px] font-black text-[#0D2245] uppercase tracking-tight leading-none group-hover:text-amber-600 transition-colors">
+                                        Essar <span className="text-amber-500">Techins</span>
+                                    </span>
+                                    <span className="block text-[8.5px] sm:text-[9.5px] text-slate-500 font-bold mt-1 tracking-wider uppercase">
+                                        OIL MILL MACHINERIES AND SPARES
+                                    </span>
+                                </div>
+                            </div>
                         ) : (
                             <div className="flex items-center gap-2.5">
                                 {/* Gear + ET monogram icon */}
@@ -104,8 +114,8 @@ export default function AppLayout({ children }) {
                                     <span className="block text-[15px] sm:text-[16px] font-black text-[#0D2245] uppercase tracking-tight leading-none">
                                         Essar <span className="text-amber-500">Techins</span>
                                     </span>
-                                    <span className="block text-[9px] sm:text-[10px] text-slate-500 font-medium mt-0.5 tracking-wide uppercase">
-                                        Industrial Machinery
+                                    <span className="block text-[8.5px] sm:text-[9.5px] text-slate-500 font-medium mt-0.5 tracking-wide uppercase">
+                                        OIL MILL MACHINERIES AND SPARES
                                     </span>
                                 </div>
                             </div>
@@ -216,7 +226,7 @@ export default function AppLayout({ children }) {
                                 <span className="block text-[16px] font-black uppercase tracking-tight text-white">
                                     Essar <span className="text-amber-400">Techins</span>
                                 </span>
-                                <span className="block text-[10px] text-white/50 tracking-widest uppercase font-medium">Industrial Machinery</span>
+                                <span className="block text-[9.5px] text-white/50 tracking-widest uppercase font-medium">OIL MILL MACHINERIES AND SPARES</span>
                             </div>
                         </div>
                         <p className="text-[13.5px] text-white/60 leading-relaxed">

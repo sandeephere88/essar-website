@@ -32,14 +32,6 @@ return [
             'label' => 'Video Embed',
             'icon' => 'heroicon-o-video-camera',
         ],
-        'department_grid' => [
-            'label' => 'Department Grid',
-            'icon' => 'heroicon-o-squares-2x2',
-        ],
-        'doctor_grid' => [
-            'label' => 'Doctor Grid',
-            'icon' => 'heroicon-o-users',
-        ],
         'testimonial_slider' => [
             'label' => 'Testimonial Slider',
             'icon' => 'heroicon-o-chat-bubble-bottom-center-text',
@@ -72,14 +64,6 @@ return [
             'label' => 'Profile Block',
             'icon' => 'heroicon-o-user',
         ],
-        'unique_experiences' => [
-            'label' => 'We Create Unique Experiences',
-            'icon' => 'heroicon-o-sparkles',
-        ],
-        'care_role_grid' => [
-            'label' => 'Our Care Role Block',
-            'icon' => 'heroicon-o-user-group',
-        ],
         'tabs_content' => [
             'label' => 'Tabbed Content',
             'icon' => 'heroicon-o-folder',
@@ -95,6 +79,10 @@ return [
         'google_map' => [
             'label' => 'Google Map Embed',
             'icon' => 'heroicon-o-map-pin',
+        ],
+        'client_logos' => [
+            'label' => 'Client Logos Grid / Slider',
+            'icon' => 'heroicon-o-building-office',
         ],
     ],
 ];

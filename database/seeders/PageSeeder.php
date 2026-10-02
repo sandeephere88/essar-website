@@ -15,69 +15,39 @@ class PageSeeder extends Seeder
             [
                 'title' => 'Home',
                 'status' => 'published',
-                'content' => 'Professional Care That Feels Like Home.',
+                'content' => 'Leading Manufacturer of Copra Dryers & Industrial Oil Mill Machinery.',
                 'blocks' => [
                     [
-                        'type' => 'unique_experiences',
+                        'type' => 'client_logos',
                         'data' => [
-                            'heading_before' => 'We Create',
-                            'heading_accent' => 'Unique Experiences',
-                            'description' => 'We provide comprehensive home care services designed to fit your unique needs, ensuring safety, independence, and peace of mind for you and your loved ones.',
-                            'stat_badges' => [
-                                [
-                                    'label' => 'Our Vision',
-                                    'subtext' => 'Our vision is to become THE platform for independent nurses and caregivers for booking shifts and finding people that need care.',
-                                ],
-                                [
-                                    'label' => 'Our Motto',
-                                    'subtext' => 'Our vision is to become THE platform for independent nurses and caregivers for booking shifts and finding people that need care.',
-                                ],
-                                [
-                                    'label' => 'Our Mission',
-                                    'subtext' => 'Our mission is to stay true to the independent nurses and caregivers so that they always have a way to book shifts.',
-                                ],
+                            'heading_before' => 'Our Valued',
+                            'heading_accent' => 'Clients',
+                            'description' => 'Trusted by leading agricultural, oil processing, and industrial units across India and abroad.',
+                            'mode' => 'all',
+                        ],
+                    ],
+                    [
+                        'type' => 'stats_counters',
+                        'data' => [
+                            'heading_before' => 'Engineering',
+                            'heading_accent' => 'Excellence in Numbers',
+                            'description' => 'Over two decades of dedication to quality manufacturing and customer satisfaction.',
+                            'counters' => [
+                                ['label' => 'Years Experience', 'value' => '24+'],
+                                ['label' => 'Machines Installed', 'value' => '500+'],
+                                ['label' => 'Product Categories', 'value' => '7'],
+                                ['label' => 'GST & ISO Verified', 'value' => '100%'],
                             ],
                         ],
                     ],
                     [
-                        'type' => 'care_role_grid',
+                        'type' => 'cta_banner',
                         'data' => [
-                            'badge_text' => 'ALL SPECIALITIES',
-                            'heading_before' => 'Our Care',
-                            'heading_accent' => 'Role',
-                            'description' => 'Explore our specialist healthcare and nursing roles designed for every care requirement.',
-                            'roles' => [
-                                [
-                                    'title' => 'Registered Nurse',
-                                    'subtitle' => 'Qualified Registered Nurses, 24/7',
-                                    'bg_color' => '#E0E6ED',
-                                ],
-                                [
-                                    'title' => 'Mental Health Nurses',
-                                    'subtitle' => 'Professional Care for Mental Wellbeing',
-                                    'bg_color' => '#D8E6DF',
-                                ],
-                                [
-                                    'title' => 'Health Care Assistants',
-                                    'subtitle' => 'Reliable Care, Delivered with Compassion',
-                                    'bg_color' => '#DDE3EA',
-                                ],
-                                [
-                                    'title' => 'Support Workers',
-                                    'subtitle' => 'Empowering Independence Through Compassionate Support',
-                                    'bg_color' => '#E2E8F0',
-                                ],
-                                [
-                                    'title' => 'Nursery Workers',
-                                    'subtitle' => 'Nurturing Young Minds with Care and Compassion',
-                                    'bg_color' => '#DFEADF',
-                                ],
-                                [
-                                    'title' => 'Homecare Workers',
-                                    'subtitle' => 'Supporting Independent Living with Compassion',
-                                    'bg_color' => '#E2E8F0',
-                                ],
-                            ],
+                            'heading_before' => 'Need a Customized',
+                            'heading_accent' => 'Oil Mill Solution?',
+                            'description' => 'Contact our engineering team today for a free consultation and project estimate tailored to your capacity.',
+                            'button_text' => 'Request a Quote',
+                            'button_url' => '/contact',
                         ],
                     ],
                 ],
@@ -87,9 +57,9 @@ class PageSeeder extends Seeder
         $home->seoMeta()->updateOrCreate(
             [],
             [
-                'meta_title' => 'Home | Fine Care 24/7 LTD',
-                'meta_description' => 'Providing compassionate healthcare professionals you can trust, delivering quality care with dignity, dedication, and reliability 24/7.',
-                'meta_keywords' => 'home care, care professional, care organisation, fine care 247',
+                'meta_title' => 'Essar Techins — Copra Dryers & Industrial Machinery Manufacturer',
+                'meta_description' => 'Leading manufacturer of Copra Dryers, Oil Processing Plants, Expellers, Filter Presses & Industrial Boilers in Aluva, Kerala, India. Est. 2000.',
+                'meta_keywords' => 'copra dryer, oil expeller, coconut processing, industrial machinery, essar techins, aluva, kerala',
             ]
         );
 
@@ -99,7 +69,7 @@ class PageSeeder extends Seeder
             [
                 'title' => 'About Us',
                 'status' => 'published',
-                'content' => '<h2>Our Dedication & History</h2><p>Welcome to Fine Care 24/7. We offer state-of-the-art diagnostic tools, expert medical panels, and inpatient care built on compassion, transparency and distinction.</p>',
+                'content' => '<h2>24+ Years of Industrial Excellence</h2><p>Welcome to Essar Techins. Based in Aluva, Kerala, we specialize in high-efficiency Copra Dryers, Oil Mill Machinery, Filter Presses, and Industrial Boilers built for continuous performance.</p>',
                 'hero_image' => null,
             ]
         );
@@ -107,9 +77,9 @@ class PageSeeder extends Seeder
         $about->seoMeta()->updateOrCreate(
             [],
             [
-                'meta_title' => 'About Us | Fine Care 24/7 LTD',
-                'meta_description' => 'Learn more about Fine Care 24/7 LTD, our legacy of patient-centered healthcare, and our healthcare staffing solutions.',
-                'meta_keywords' => 'about us, care agency, medical legacy, patient care',
+                'meta_title' => 'About Us | Essar Techins',
+                'meta_description' => 'Learn more about Essar Techins, our history in industrial machinery manufacturing, quality commitment, and engineering expertise.',
+                'meta_keywords' => 'about us, essar techins, industrial machinery, copra dryers, oil mills, aluva',
             ]
         );
 
@@ -119,7 +89,7 @@ class PageSeeder extends Seeder
             [
                 'title' => 'Contact Us',
                 'status' => 'published',
-                'content' => '<h2>Get In Touch</h2><p>Have questions or need to book an appointment? Contact our desk today. Our support team is available 24/7 to answer your queries.</p>',
+                'content' => '<h2>Get In Touch</h2><p>Have questions or need a quotation for our machinery? Contact our sales desk today. Our engineering team is ready to assist you.</p>',
                 'hero_image' => null,
             ]
         );
@@ -127,12 +97,12 @@ class PageSeeder extends Seeder
         $contact->seoMeta()->updateOrCreate(
             [],
             [
-                'meta_title' => 'Contact Us | Fine Care 24/7 LTD',
-                'meta_description' => 'Get in touch with Fine Care 24/7. Call us, email us, or fill out our online contact form to get immediate support.',
-                'meta_keywords' => 'contact, phone, email, address, support',
+                'meta_title' => 'Contact Us | Essar Techins',
+                'meta_description' => 'Get in touch with Essar Techins in Aluva, Kerala. Call +91 98470 00000 or email mep@essartechins.com for machine quotes and technical support.',
+                'meta_keywords' => 'contact essar techins, machinery quote, aluva address, phone number',
             ]
         );
 
-        $this->command->info('✅ Pages (Home, About Us & Contact Us) seeded successfully.');
+        $this->command->info('✅ Pages (Home, About Us & Contact Us) seeded successfully for Essar Techins.');
     }
 }

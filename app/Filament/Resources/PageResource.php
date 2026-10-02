@@ -201,56 +201,7 @@ class PageResource extends Resource
                                         ]),
                                 ], self::getBackgroundSchema())),
                                 
-                            Block::make('department_grid')
-                                ->label(config('blocks.registry.department_grid.label'))
-                                ->icon(config('blocks.registry.department_grid.icon'))
-                                ->schema(array_merge([
-                                    TextInput::make('heading_before')->label('Heading Main Text'),
-                                    TextInput::make('heading_accent')->label('Heading Accent (Italic)'),
-                                    Textarea::make('description')->label('Section Description')->rows(2),
-                                    Select::make('mode')
-                                        ->options([
-                                            'all' => 'All Departments',
-                                            'selected' => 'Selected Departments',
-                                        ])
-                                        ->default('all')
-                                        ->live()
-                                        ->required(),
-                                    Select::make('selected_department_ids')
-                                        ->multiple()
-                                        ->options(fn () => \App\Models\Department::pluck('name', 'id'))
-                                        ->visible(fn (Forms\Get $get) => $get('mode') === 'selected'),
-                                    TextInput::make('limit')
-                                        ->numeric(),
-                                ], self::getBackgroundSchema())),
-                                
-                            Block::make('care_role_grid')
-                                ->label(config('blocks.registry.care_role_grid.label'))
-                                ->icon(config('blocks.registry.care_role_grid.icon'))
-                                ->schema([
-                                    TextInput::make('badge_text')
-                                        ->label('Pill Badge / Tag Text (Above Heading)')
-                                        ->placeholder('e.g. ALL SPECIALITIES')
-                                        ->default('ALL SPECIALITIES'),
-                                    TextInput::make('heading_before')
-                                        ->label('Heading Main Text')
-                                        ->default('Our Care'),
-                                    TextInput::make('heading_accent')
-                                        ->label('Heading Accent (Italic)')
-                                        ->default('Role'),
-                                    Textarea::make('description')
-                                        ->label('Subtitle Description')
-                                        ->default('Explore our specialist healthcare and nursing roles designed for every care requirement.'),
-                                    Repeater::make('roles')
-                                        ->label('Care Roles (6 Cards Grid)')
-                                        ->schema([
-                                            TextInput::make('title')->label('Role Title')->required(),
-                                            TextInput::make('subtitle')->label('Short Description/Subtitle')->required(),
-                                            FileUpload::make('image')->label('Card Graphic / Image (contains background pattern)')->image()->directory('care-roles')->columnSpanFull(),
-                                        ])
-                                        ->columns(2),
-                                ]),
-                                
+
                             Block::make('testimonial_slider')
                                 ->label(config('blocks.registry.testimonial_slider.label'))
                                 ->icon(config('blocks.registry.testimonial_slider.icon'))
@@ -429,38 +380,6 @@ class PageResource extends Resource
                                         ->required(),
                                 ]),
 
-                            Block::make('unique_experiences')
-                                ->label(config('blocks.registry.unique_experiences.label'))
-                                ->icon(config('blocks.registry.unique_experiences.icon'))
-                                ->schema([
-                                    TextInput::make('heading_before')
-                                        ->label('Heading Main Text')
-                                        ->default('We Create'),
-                                    TextInput::make('heading_accent')
-                                        ->label('Heading Accent (Italic)')
-                                        ->default('Unique Experiences'),
-                                    Textarea::make('description')
-                                        ->label('Subtitle Description')
-                                        ->rows(3),
-                                    FileUpload::make('image')
-                                        ->label('Team/Banner Photo (1439x600, rounded 50px)')
-                                        ->image()
-                                        ->directory('pages'),
-                                    Repeater::make('stat_badges')
-                                        ->label('Vision / Motto / Mission Cards (375x276, rounded 20px)')
-                                        ->schema([
-                                            TextInput::make('label')
-                                                ->label('Card Title')
-                                                ->placeholder('e.g. Our Vision')
-                                                ->required(),
-                                            Textarea::make('subtext')
-                                                ->label('Card Description')
-                                                ->placeholder('e.g. Empathy · Respect · Integrity · Dignity')
-                                                ->rows(2),
-                                        ])
-                                        ->columns(1),
-                                ]),
-
                             Block::make('tabs_content')
                                 ->label(fn (?array $state): string => config('blocks.registry.tabs_content.label') . (!empty($state['title']) ? ': ' . strip_tags($state['title']) : ''))
                                 ->icon(config('blocks.registry.tabs_content.icon'))
@@ -515,16 +434,16 @@ class PageResource extends Resource
                                             Textarea::make('address')
                                                 ->label('Full Address')
                                                 ->rows(2)
-                                                ->placeholder('e.g. 782 Chester Rd, Erdington, Birmingham B24 0ED, United Kingdom'),
+                                                ->placeholder('e.g. Aluva, Ernakulam, Kerala 683101, India'),
                                             TextInput::make('phone')
                                                 ->label('Phone Number')
-                                                ->placeholder('e.g. 01217861977 or +44 7570161977'),
+                                                ->placeholder('e.g. +91 98470 00000'),
                                             TextInput::make('email')
                                                 ->label('Email Address')
-                                                ->placeholder('e.g. info@finecare247.com'),
+                                                ->placeholder('e.g. mep@essartechins.com'),
                                             TextInput::make('badge')
                                                 ->label('Badge / Tag (Optional)')
-                                                ->placeholder('e.g. UK, Ireland, Canada, India'),
+                                                ->placeholder('e.g. Head Office, Factory, Branch'),
                                         ])
                                         ->columns(2)
                                         ->collapsible()
@@ -546,6 +465,46 @@ class PageResource extends Resource
                                         ->rows(3)
                                         ->helperText('Leave empty to use Google Map URL set under Business Profile / Settings.'),
                                 ]),
+
+                            Block::make('client_logos')
+                                ->label(config('blocks.registry.client_logos.label'))
+                                ->icon(config('blocks.registry.client_logos.icon'))
+                                ->schema(array_merge([
+                                    TextInput::make('heading_before')
+                                        ->label('Heading Main Text')
+                                        ->default('Our Valued'),
+                                    TextInput::make('heading_accent')
+                                        ->label('Heading Accent (Italic)')
+                                        ->default('Clients'),
+                                    Textarea::make('description')
+                                        ->label('Section Description')
+                                        ->rows(2)
+                                        ->default('Trusted by leading agricultural and oil processing organizations across India and globally.'),
+                                    Select::make('mode')
+                                        ->label('Client Logos Source')
+                                        ->options([
+                                            'all' => 'All Active Clients (from Admin Content -> Client Logos)',
+                                            'selected' => 'Selected Clients (from Admin)',
+                                            'custom' => 'Custom Inline Logos (Add manually below)',
+                                        ])
+                                        ->default('all')
+                                        ->live()
+                                        ->required(),
+                                    Select::make('selected_client_ids')
+                                        ->label('Select Clients')
+                                        ->multiple()
+                                        ->options(fn () => \App\Models\Client::pluck('name', 'id'))
+                                        ->visible(fn (Forms\Get $get) => $get('mode') === 'selected'),
+                                    Repeater::make('custom_clients')
+                                        ->label('Inline Client Logos')
+                                        ->schema([
+                                            TextInput::make('name')->label('Client Name')->required(),
+                                            FileUpload::make('logo')->label('Client Logo Image')->image()->directory('clients')->required(),
+                                            TextInput::make('website')->label('Website URL (Optional)')->url(),
+                                        ])
+                                        ->columns(2)
+                                        ->visible(fn (Forms\Get $get) => $get('mode') === 'custom'),
+                                ], self::getBackgroundSchema())),
                         ])
                         ->columnSpanFull(),
                 ]),

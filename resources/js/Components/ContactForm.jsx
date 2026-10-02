@@ -2,12 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { assetUrl } from '@/Utils/asset';
 
+const INDIA_COUNTRY = { code: 'IN', name: 'India', dialCode: '+91', flag: '🇮🇳' };
+
 const PINNED_COUNTRIES = [
+    INDIA_COUNTRY,
     { code: 'GB', name: 'United Kingdom', dialCode: '+44', flag: '🇬🇧' },
     { code: 'IE', name: 'Ireland', dialCode: '+353', flag: '🇮🇪' },
 ];
 
 const ALL_COUNTRIES = [
+    INDIA_COUNTRY,
     { code: 'GB', name: 'United Kingdom', dialCode: '+44', flag: '🇬🇧' },
     { code: 'IE', name: 'Ireland', dialCode: '+353', flag: '🇮🇪' },
     { code: 'AF', name: 'Afghanistan', dialCode: '+93', flag: '🇦🇫' },
@@ -351,10 +355,16 @@ function CountryCodeSelect({ selectedCountry, onSelect }) {
     );
 }
 
-export default function ContactForm({ titleBefore = "Talk to our", titleAccent = "team", description, imageSrc }) {
-    const { flash, captcha } = usePage().props;
+export default function ContactForm({ titleBefore = "Talk to our", titleAccent = "team", description }) {
+    const { flash, captcha, businessProfile } = usePage().props;
 
-    const [selectedCountry, setSelectedCountry] = useState(ALL_COUNTRIES[0]);
+    const profile = businessProfile;
+    const phone = profile?.phone_numbers?.[0]?.number || '+91 98470 00000';
+    const email = profile?.email || 'info@essartechins.co.in';
+    const address = profile?.address || 'Aluva, Ernakulam, Kerala, India — 683101';
+    const companyName = profile?.name || 'Essar Techins';
+
+    const [selectedCountry, setSelectedCountry] = useState(INDIA_COUNTRY);
     const [phoneNumber, setPhoneNumber] = useState('');
 
     const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
@@ -362,14 +372,11 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
         last_name: '',
         email: '',
         phone: '',
-        role: 'health_care_organization',
+        role: 'business_inquiry',
         message: '',
         agreed: false,
         captcha: '',
     });
-
-    const [imgUrl, setImgUrl] = useState(assetUrl(imageSrc || '/images/contact-caregiver.jpg'));
-    const fallbackImage = "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=1000";
 
     const handlePhoneChange = (val) => {
         setPhoneNumber(val);
@@ -389,7 +396,7 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
             onSuccess: () => {
                 reset('first_name', 'last_name', 'email', 'phone', 'message', 'captcha');
                 setPhoneNumber('');
-                setSelectedCountry(ALL_COUNTRIES[0]);
+                setSelectedCountry(INDIA_COUNTRY);
             },
         });
     };
@@ -415,20 +422,88 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
                 )}
 
                 {/* Main 2-column grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
 
-                    {/* Left Column Image */}
-                    <div className="lg:col-span-5 rounded-3xl overflow-hidden shadow-sm h-64 sm:h-[460px] relative">
-                        <img
-                            src={imgUrl}
-                            alt="Caregiver with patient"
-                            className="w-full h-full object-cover rounded-3xl"
-                            onError={() => setImgUrl(fallbackImage)}
-                        />
+                    {/* Left Column: Contact Details Card */}
+                    <div className="lg:col-span-5 bg-[#0D2245] text-white rounded-[28px] p-6 sm:p-9 shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[460px]">
+                        {/* Background radial highlight */}
+                        <div className="absolute inset-0 opacity-15 pointer-events-none"
+                            style={{ backgroundImage: 'radial-gradient(circle, #F59E0B 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+                        <div className="absolute -bottom-16 -right-16 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                        <div className="relative z-10 space-y-6">
+                            <div>
+                                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[11px] font-bold uppercase tracking-widest mb-4">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                    Contact Details
+                                </span>
+                                <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+                                    Get in <span className="text-amber-400">Touch</span>
+                                </h3>
+                                <p className="mt-2 text-xs sm:text-sm text-white/70 leading-relaxed">
+                                    Have questions about our Copra Dryers, Oil Processing Plants, or custom industrial machinery? Contact our sales & engineering team.
+                                </p>
+                            </div>
+
+                            {/* Contact Details List */}
+                            <div className="space-y-5 pt-2">
+                                {/* Phone */}
+                                <div className="flex items-start gap-3.5">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400 mt-0.5">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-400/90">Phone Number</h4>
+                                        <a href={`tel:${phone.replace(/\s/g, '')}`} className="text-sm sm:text-base font-bold text-white hover:text-amber-400 transition-colors block mt-0.5">
+                                            {phone}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Email */}
+                                <div className="flex items-start gap-3.5">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400 mt-0.5">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-400/90">Email Address</h4>
+                                        <a href={`mailto:${email}`} className="text-xs sm:text-sm font-semibold text-white/90 hover:text-amber-400 transition-colors block mt-0.5 break-all">
+                                            {email}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Address */}
+                                <div className="flex items-start gap-3.5">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400 mt-0.5">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><circle cx="12" cy="11" r="3" /></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-400/90">Factory & Location</h4>
+                                        <p className="text-xs sm:text-sm font-medium text-white/80 leading-relaxed mt-0.5">
+                                            {address}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Badges footer */}
+                        <div className="relative z-10 pt-5 border-t border-white/10 flex flex-wrap gap-2 mt-6">
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10">
+                                GST Verified
+                            </span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10">
+                                Pan India Delivery
+                            </span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10">
+                                Est. 2000
+                            </span>
+                        </div>
                     </div>
 
                     {/* Right Column Form Container */}
-                    <div className="lg:col-span-7 bg-[#EAEAEA] rounded-[28px] p-6 sm:p-10 shadow-sm relative">
+                    <div className="lg:col-span-7 bg-[#EAEAEA] rounded-[28px] p-6 sm:p-10 shadow-sm relative flex flex-col justify-center">
 
                         {(recentlySuccessful || flash?.success) && (
                             <div className="mb-6 p-4 bg-[#E8F5E9] border border-[#00897B] text-[#004d40] rounded-xl text-xs font-bold flex items-center gap-2">
@@ -511,34 +586,34 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
                                 </div>
                             </div>
 
-                            {/* I'm a... Radio Group (Enum) */}
+                            {/* Inquiry Category */}
                             <div>
                                 <label className="block text-xs font-semibold text-slate-700 mb-2">
-                                    I'm a... <span className="text-red-500">*</span>
+                                    I'm looking for... <span className="text-red-500">*</span>
                                 </label>
                                 <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-700">
                                     <label className="inline-flex items-center gap-2 cursor-pointer">
                                         <input
                                             type="radio"
                                             name="role"
-                                            value="health_care_organization"
-                                            checked={data.role === 'health_care_organization'}
+                                            value="business_inquiry"
+                                            checked={data.role === 'business_inquiry' || data.role === 'health_care_organization'}
                                             onChange={e => setData('role', e.target.value)}
                                             className="w-4 h-4 text-[#052b4d] focus:ring-[#052b4d] border-slate-300"
                                         />
-                                        <span>Health / Care Organization</span>
+                                        <span>Product / Machine Quote</span>
                                     </label>
 
                                     <label className="inline-flex items-center gap-2 cursor-pointer">
                                         <input
                                             type="radio"
                                             name="role"
-                                            value="professional_looking_for_work"
-                                            checked={data.role === 'professional_looking_for_work'}
+                                            value="technical_support"
+                                            checked={data.role === 'technical_support' || data.role === 'professional_looking_for_work'}
                                             onChange={e => setData('role', e.target.value)}
                                             className="w-4 h-4 text-[#052b4d] focus:ring-[#052b4d] border-slate-300"
                                         />
-                                        <span>Professional looking for work</span>
+                                        <span>Technical Support / Service</span>
                                     </label>
 
                                     <label className="inline-flex items-center gap-2 cursor-pointer">
@@ -546,7 +621,7 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
                                             type="radio"
                                             name="role"
                                             value="others"
-                                            checked={data.role === 'others' || data.role === 'staffing_agency'}
+                                            checked={data.role === 'others'}
                                             onChange={e => setData('role', e.target.value)}
                                             className="w-4 h-4 text-[#052b4d] focus:ring-[#052b4d] border-slate-300"
                                         />
@@ -597,7 +672,7 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
                                         className="mt-0.5 w-4 h-4 rounded text-[#052b4d] focus:ring-[#052b4d] border-slate-300 shrink-0"
                                     />
                                     <span>
-                                        I agree my personal data being processed in accordance with Fine Care 24/7 Ltd and communication about its services.
+                                        I agree to my personal data being processed in accordance with {companyName} privacy policy and communication about its services.
                                     </span>
                                 </label>
 

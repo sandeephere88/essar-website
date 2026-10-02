@@ -50,7 +50,7 @@ class PageController extends Controller
             'name'       => 'nullable|string|max:255',
             'email'      => 'required|email|max:255',
             'phone'      => 'nullable|string|max:50',
-            'role'       => 'nullable|string|in:health_care_organization,professional_looking_for_work,staffing_agency,others',
+            'role'       => 'nullable|string|in:business_inquiry,technical_support,others,health_care_organization,professional_looking_for_work,staffing_agency',
             'subject'    => 'nullable|string|max:255',
             'message'    => 'nullable|string',
             'captcha'    => [
@@ -124,7 +124,7 @@ class PageController extends Controller
         ]);
     }
 
-    private function hydrateBlocks($blocks): array
+    public static function hydrateBlocks($blocks): array
     {
         $blocks = is_array($blocks) ? $blocks : [];
         $hydratedBlocks = [];
@@ -181,6 +181,27 @@ class PageController extends Controller
                         $query->whereIn('id', $data['selected_accreditation_ids']);
                     }
                     $data['hydrated_accreditations'] = $query->get();
+                    break;
+                case 'client_logos':
+                    if (($data['mode'] ?? 'all') === 'custom') {
+                        $clients = collect($data['custom_clients'] ?? [])->map(fn($c) => [
+                            'name' => $c['name'] ?? '',
+                            'logo_url' => !empty($c['logo']) ? asset('storage/' . $c['logo']) : null,
+                            'website' => $c['website'] ?? null,
+                        ]);
+                    } else {
+                        $query = \App\Models\Client::active()->orderBy('sort_order');
+                        if (($data['mode'] ?? 'all') === 'selected' && !empty($data['selected_client_ids'])) {
+                            $query->whereIn('id', $data['selected_client_ids']);
+                        }
+                        $clients = $query->get()->map(fn($c) => [
+                            'id' => $c->id,
+                            'name' => $c->name,
+                            'logo_url' => $c->logo ? asset('storage/' . $c->logo) : null,
+                            'website' => $c->website,
+                        ]);
+                    }
+                    $data['hydrated_clients'] = $clients;
                     break;
                 case 'gallery_block':
                     if (!empty($data['album_id'])) {
