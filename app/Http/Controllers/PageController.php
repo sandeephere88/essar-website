@@ -204,21 +204,59 @@ class PageController extends Controller
                     $data['hydrated_clients'] = $clients;
                     break;
                 case 'gallery_block':
-                    if (!empty($data['album_id'])) {
-                        $gallery = \App\Models\Gallery::with('media')->find($data['album_id']);
+                    $hydratedGallery = null;
+                    $albumId = $data['album_id'] ?? null;
+                    $mode = $data['mode'] ?? 'album';
+
+                    if (($mode === 'album' || !empty($albumId))) {
+                        $gallery = !empty($albumId)
+                            ? \App\Models\Gallery::with('media')->find($albumId)
+                            : \App\Models\Gallery::with('media')->where('is_active', true)->first();
+
                         if ($gallery) {
-                            $data['hydrated_gallery'] = [
+                            $mediaItems = $gallery->getMedia('images');
+                            if ($mediaItems->isEmpty()) {
+                                $mediaItems = $gallery->getMedia();
+                            }
+
+                            $images = $mediaItems->map(fn($media) => [
+                                'id' => $media->id,
+                                'url' => $media->getUrl(),
+                                'thumb' => $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(),
+                                'name' => $media->name,
+                            ])->values();
+
+                            $hydratedGallery = [
+                                'id' => $gallery->id,
                                 'title' => $gallery->title,
                                 'description' => $gallery->description,
-                                'images' => $gallery->getMedia()->map(fn($media) => [
-                                    'id' => $media->id,
-                                    'url' => $media->getUrl('large'),
-                                    'thumb' => $media->getUrl('thumb'),
-                                    'name' => $media->name,
-                                ])
+                                'images' => $images,
                             ];
                         }
                     }
+
+                    if ((empty($hydratedGallery) || empty($hydratedGallery['images']) || count($hydratedGallery['images']) === 0) && !empty($data['custom_images']) && is_array($data['custom_images'])) {
+                        $customImgs = collect($data['custom_images'])->map(function($img, $idx) {
+                            $path = is_array($img) ? ($img['image'] ?? $img['url'] ?? null) : $img;
+                            if (empty($path)) return null;
+                            $url = filter_var($path, FILTER_VALIDATE_URL) ? $path : asset('storage/' . $path);
+                            return [
+                                'id' => 'custom_' . $idx,
+                                'url' => $url,
+                                'thumb' => $url,
+                                'name' => 'Gallery Image ' . ($idx + 1),
+                            ];
+                        })->filter()->values();
+
+                        $hydratedGallery = [
+                            'id' => 'custom',
+                            'title' => $data['heading'] ?? 'Gallery',
+                            'description' => $data['description'] ?? '',
+                            'images' => $customImgs,
+                        ];
+                    }
+
+                    $data['hydrated_gallery'] = $hydratedGallery;
                     break;
                 case 'unique_experiences':
                     if (!empty($data['image'])) {

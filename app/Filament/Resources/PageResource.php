@@ -250,9 +250,28 @@ class PageResource extends Resource
                                 ->schema(array_merge([
                                     TextInput::make('heading')->label('Section Heading (Optional)'),
                                     Textarea::make('description')->label('Section Description (Optional)')->rows(2),
-                                    Select::make('album_id')
-                                        ->options(fn () => \App\Models\Gallery::pluck('title', 'id'))
+                                    Select::make('mode')
+                                        ->label('Gallery Source')
+                                        ->options([
+                                            'album' => 'Select Saved Album (from Content -> Gallery)',
+                                            'custom' => 'Upload Images Directly in Block',
+                                        ])
+                                        ->default('album')
+                                        ->live()
                                         ->required(),
+                                    Select::make('album_id')
+                                        ->label('Select Album')
+                                        ->options(fn () => \App\Models\Gallery::pluck('title', 'id'))
+                                        ->visible(fn (Forms\Get $get) => ($get('mode') ?? 'album') === 'album')
+                                        ->required(fn (Forms\Get $get) => ($get('mode') ?? 'album') === 'album'),
+                                    FileUpload::make('custom_images')
+                                        ->label('Upload Gallery Images')
+                                        ->multiple()
+                                        ->image()
+                                        ->directory('gallery-blocks')
+                                        ->reorderable()
+                                        ->visible(fn (Forms\Get $get) => $get('mode') === 'custom')
+                                        ->required(fn (Forms\Get $get) => $get('mode') === 'custom'),
                                 ], self::getBackgroundSchema())),
                                 
                             Block::make('faq_accordion')
