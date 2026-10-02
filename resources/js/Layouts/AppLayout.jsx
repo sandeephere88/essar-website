@@ -215,20 +215,37 @@ export default function AppLayout({ children }) {
 
                     {/* Brand Column */}
                     <div className="lg:col-span-4 space-y-5">
-                        <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-                                <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
+                        {profile?.logo && !footerLogoError ? (
+                            <div className="flex items-center gap-3">
+                                <img
+                                    src={storageUrl(profile.logo)}
+                                    alt={name}
+                                    className="h-10 sm:h-11 w-auto object-contain max-w-[180px] bg-white/95 p-1 rounded-lg shadow-sm"
+                                    onError={() => setFooterLogoError(true)}
+                                />
+                                <div>
+                                    <span className="block text-[16px] font-black uppercase tracking-tight text-white">
+                                        Essar <span className="text-amber-400">Techins</span>
+                                    </span>
+                                    <span className="block text-[9.5px] text-white/50 tracking-widest uppercase font-medium">OIL MILL MACHINERIES AND SPARES</span>
+                                </div>
                             </div>
-                            <div>
-                                <span className="block text-[16px] font-black uppercase tracking-tight text-white">
-                                    Essar <span className="text-amber-400">Techins</span>
-                                </span>
-                                <span className="block text-[9.5px] text-white/50 tracking-widest uppercase font-medium">OIL MILL MACHINERIES AND SPARES</span>
+                        ) : (
+                            <div className="flex items-center gap-3">
+                                <div className="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
+                                    <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span className="block text-[16px] font-black uppercase tracking-tight text-white">
+                                        Essar <span className="text-amber-400">Techins</span>
+                                    </span>
+                                    <span className="block text-[9.5px] text-white/50 tracking-widest uppercase font-medium">OIL MILL MACHINERIES AND SPARES</span>
+                                </div>
                             </div>
-                        </div>
+                        )}
                         <p className="text-[13.5px] text-white/60 leading-relaxed">
                             Trusted manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses, and Industrial Boilers. Based in Muvattupuzha, Kerala — serving India since 2000.
                         </p>
