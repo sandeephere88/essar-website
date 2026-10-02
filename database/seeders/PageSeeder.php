@@ -58,8 +58,8 @@ class PageSeeder extends Seeder
             [],
             [
                 'meta_title' => 'Essar Techins — Copra Dryers & Industrial Machinery Manufacturer',
-                'meta_description' => 'Leading manufacturer of Copra Dryers, Oil Processing Plants, Expellers, Filter Presses & Industrial Boilers in Aluva, Kerala, India. Est. 2000.',
-                'meta_keywords' => 'copra dryer, oil expeller, coconut processing, industrial machinery, essar techins, aluva, kerala',
+                'meta_description' => 'Leading manufacturer of Copra Dryers, Oil Processing Plants, Expellers, Filter Presses & Industrial Boilers in Muvattupuzha, Kerala, India. Est. 2000.',
+                'meta_keywords' => 'copra dryer, oil expeller, coconut processing, industrial machinery, essar techins, muvattupuzha, kerala',
             ]
         );
 
@@ -69,7 +69,7 @@ class PageSeeder extends Seeder
             [
                 'title' => 'About Us',
                 'status' => 'published',
-                'content' => '<h2>24+ Years of Industrial Excellence</h2><p>Welcome to Essar Techins. Based in Aluva, Kerala, we specialize in high-efficiency Copra Dryers, Oil Mill Machinery, Filter Presses, and Industrial Boilers built for continuous performance.</p>',
+                'content' => '<h2>24+ Years of Industrial Excellence</h2><p>Welcome to Essar Techins. Based in Muvattupuzha, Kerala, we specialize in high-efficiency Copra Dryers, Oil Mill Machinery, Filter Presses, and Industrial Boilers built for continuous performance.</p>',
                 'hero_image' => null,
             ]
         );
@@ -79,7 +79,7 @@ class PageSeeder extends Seeder
             [
                 'meta_title' => 'About Us | Essar Techins',
                 'meta_description' => 'Learn more about Essar Techins, our history in industrial machinery manufacturing, quality commitment, and engineering expertise.',
-                'meta_keywords' => 'about us, essar techins, industrial machinery, copra dryers, oil mills, aluva',
+                'meta_keywords' => 'about us, essar techins, industrial machinery, copra dryers, oil mills, muvattupuzha',
             ]
         );
 
@@ -98,8 +98,8 @@ class PageSeeder extends Seeder
             [],
             [
                 'meta_title' => 'Contact Us | Essar Techins',
-                'meta_description' => 'Get in touch with Essar Techins in Aluva, Kerala. Call +91 98470 00000 or email mep@essartechins.com for machine quotes and technical support.',
-                'meta_keywords' => 'contact essar techins, machinery quote, aluva address, phone number',
+                'meta_description' => 'Get in touch with Essar Techins in Muvattupuzha, Kerala. Call +91 98470 00000 or email mep@essartechins.com for machine quotes and technical support.',
+                'meta_keywords' => 'contact essar techins, machinery quote, muvattupuzha address, phone number',
             ]
         );
 

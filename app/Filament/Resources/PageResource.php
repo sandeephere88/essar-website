@@ -434,7 +434,7 @@ class PageResource extends Resource
                                             Textarea::make('address')
                                                 ->label('Full Address')
                                                 ->rows(2)
-                                                ->placeholder('e.g. Aluva, Ernakulam, Kerala 683101, India'),
+                                                ->placeholder('e.g. Muvattupuzha, Ernakulam, Kerala 686661, India'),
                                             TextInput::make('phone')
                                                 ->label('Phone Number')
                                                 ->placeholder('e.g. +91 98470 00000'),

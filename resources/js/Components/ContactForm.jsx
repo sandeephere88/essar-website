@@ -361,7 +361,7 @@ export default function ContactForm({ titleBefore = "Talk to our", titleAccent =
     const profile = businessProfile;
     const phone = profile?.phone_numbers?.[0]?.number || '+91 98470 00000';
     const email = profile?.email || 'info@essartechins.co.in';
-    const address = profile?.address || 'Aluva, Ernakulam, Kerala, India — 683101';
+    const address = profile?.address || 'Muvattupuzha, Ernakulam, Kerala, India — 686661';
     const companyName = profile?.name || 'Essar Techins';
 
     const [selectedCountry, setSelectedCountry] = useState(INDIA_COUNTRY);

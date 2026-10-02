@@ -1,6 +1,5 @@
 /**
- * Returns a properly prefixed URL for static assets or storage files,
- * ensuring compatibility with subdirectory deployments like /corvia.
+ * Returns a properly prefixed URL for static assets or storage files.
  */
 export function assetUrl(path) {
     if (!path) return '';
@@ -8,7 +7,6 @@ export function assetUrl(path) {
         return path;
     }
 
-    // Determine base path if app is served from a subfolder like /corvia
     let basePath = '';
     if (typeof window !== 'undefined' && window.location.pathname.startsWith('/essar')) {
         basePath = '/essar';

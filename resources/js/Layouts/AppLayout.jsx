@@ -44,7 +44,7 @@ export default function AppLayout({ children }) {
     const phone = profile?.phone_numbers?.[0]?.number || '+91 98470 00000';
     const email = profile?.email ?? 'info@essartechins.co.in';
     const name  = profile?.name || 'Essar Techins';
-    const addr  = profile?.address ?? 'Aluva, Kerala, India';
+    const addr  = profile?.address ?? 'Muvattupuzha, Kerala, India';
 
     return (
         <div className="flex min-h-screen flex-col bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
@@ -57,7 +57,7 @@ export default function AppLayout({ children }) {
                             <svg className="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><circle cx="12" cy="11" r="3" />
                             </svg>
-                            Aluva, Kerala, India — 683101
+                            Muvattupuzha, Kerala, India — 686661
                         </span>
                         <span className="flex items-center gap-1.5">
                             <svg className="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -230,7 +230,7 @@ export default function AppLayout({ children }) {
                             </div>
                         </div>
                         <p className="text-[13.5px] text-white/60 leading-relaxed">
-                            Trusted manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses, and Industrial Boilers. Based in Aluva, Kerala — serving India since 2000.
+                            Trusted manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses, and Industrial Boilers. Based in Muvattupuzha, Kerala — serving India since 2000.
                         </p>
                         {/* Badges */}
                         <div className="flex flex-wrap gap-2">

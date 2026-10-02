@@ -51,7 +51,7 @@ class HeroBannerSeeder extends Seeder
             [
                 'title'          => '24+ Years of',
                 'italic_title'   => 'Manufacturing Excellence',
-                'subtitle'       => 'GST Verified · TrustSEAL Certified · Aluva, Kerala, India. Custom-built machinery for coconut and oil industries across India and beyond.',
+                'subtitle'       => 'GST Verified · TrustSEAL Certified · Muvattupuzha, Kerala, India. Custom-built machinery for coconut and oil industries across India and beyond.',
                 'button_one_text' => 'About Us',
                 'button_one_url'  => '/about',
                 'button_two_text' => 'View Products',

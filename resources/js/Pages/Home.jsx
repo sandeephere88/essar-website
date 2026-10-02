@@ -77,7 +77,7 @@ function HeroSlider({ banners }) {
                         {/* Pulse tag */}
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/20 border border-amber-500/30 mb-6">
                             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                            <span className="text-amber-300 text-xs font-bold uppercase tracking-widest">Industrial Machinery · Aluva, Kerala</span>
+                            <span className="text-amber-300 text-xs font-bold uppercase tracking-widest">Industrial Machinery · Muvattupuzha, Kerala</span>
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-4">
@@ -166,10 +166,10 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
         'email': profile?.email || 'mep@essartechins.com',
         'address': {
             '@type': 'PostalAddress',
-            'streetAddress': 'Aluva',
+            'streetAddress': 'Muvattupuzha',
             'addressLocality': 'Ernakulam',
             'addressRegion': 'Kerala',
-            'postalCode': '683101',
+            'postalCode': '686661',
             'addressCountry': 'IN'
         },
         'priceRange': '₹₹₹',
@@ -189,7 +189,7 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
             <SeoHead 
                 seoMeta={page?.seo_meta}
                 title="Essar Techins — Industrial Machinery Manufacturer"
-                description="Leading manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses & Industrial Boilers. Based in Aluva, Kerala, India. Est. 2000." 
+                description="Leading manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses & Industrial Boilers. Based in Muvattupuzha, Kerala, India. Est. 2000." 
             />
 
             {/* ── HERO ─────────────────────────────────────────────── */}
@@ -314,13 +314,13 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
                                 24+ Years of <span className="text-amber-500">Industrial Excellence</span>
                             </h2>
                             <p className="mt-4 text-slate-600 leading-relaxed text-[15px]">
-                                {profile?.custom_attributes?.about_short ||
-                                    'Essar Techins is a trusted manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses, and Industrial Boilers based in Aluva, Kerala. With over 24 years of experience, we deliver quality industrial machinery across India.'}
+                                { profile?.custom_attributes?.about_short ||
+                                    'Essar Techins is a trusted manufacturer of Copra Dryers, Oil Processing Plants, Filter Presses, and Industrial Boilers based in Muvattupuzha, Kerala. With over 24 years of experience, we deliver quality industrial machinery across India.' }
                             </p>
                             <div className="mt-6 grid grid-cols-2 gap-4">
                                 {[
                                     { val: 'Est. 2000', label: 'Founded' },
-                                    { val: 'Aluva, Kerala', label: 'Location' },
+                                    { val: 'Muvattupuzha, Kerala', label: 'Location' },
                                     { val: 'GST Verified', label: 'Certification' },
                                     { val: 'Pan India', label: 'Delivery' },
                                 ].map(s => (
