@@ -22,18 +22,30 @@ class AccreditationResource extends Resource
     protected static ?string $model = Accreditation::class;
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
     protected static ?string $navigationGroup = 'Content';
-    protected static ?string $navigationLabel = 'Certifications';
+    protected static ?string $navigationLabel = 'Certificates & Memberships';
     protected static ?int $navigationSort = 70;
 
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make('Accreditation / Certification Details')
+            Section::make('Certificate / Membership Details')
                 ->columns(2)
                 ->schema([
                     TextInput::make('title')
+                        ->label('Name')
+                        ->placeholder('e.g. ISO 9001:2015, MSME Registration, etc.')
                         ->required()
                         ->maxLength(255),
+
+                    Select::make('type')
+                        ->label('Type')
+                        ->options([
+                            'certificate' => 'Certificate',
+                            'membership'  => 'Membership',
+                        ])
+                        ->default('certificate')
+                        ->native(false)
+                        ->required(),
 
                     Select::make('is_active')
                         ->label('Status')
@@ -71,7 +83,18 @@ class AccreditationResource extends Resource
             ->columns([
                 TextColumn::make('sort_order')->label('#')->sortable(),
                 ImageColumn::make('logo')->circular()->size(48),
-                TextColumn::make('title')->searchable()->sortable(),
+                TextColumn::make('title')->label('Name')->searchable()->sortable(),
+                TextColumn::make('type')
+                    ->label('Type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'membership'  => 'success',
+                        default       => 'info',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'membership'  => 'Membership',
+                        default       => 'Certificate',
+                    }),
                 ToggleColumn::make('is_active')->label('Active'),
                 TextColumn::make('updated_at')->dateTime()->sortable(),
             ])

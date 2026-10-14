@@ -102,6 +102,7 @@ class HomeController extends Controller
             ->map(fn ($ac) => [
                 'id'          => $ac->id,
                 'title'       => $ac->title,
+                'type'        => $ac->type ?? 'certificate',
                 'description' => $ac->description,
                 'logo'        => $ac->logo ? asset('storage/' . $ac->logo) : null,
             ]);

@@ -8,6 +8,7 @@ class Accreditation extends Model
 {
     protected $fillable = [
         'title',
+        'type',
         'description',
         'logo',
         'is_active',

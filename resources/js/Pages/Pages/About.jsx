@@ -14,7 +14,7 @@ export default function About({ page }) {
             {!hasHeroBlock && (
                 <PageHero
                     title={page?.title || 'About Us'}
-                    subtitle="Leading manufacturer of industrial oil processing plants, copra dryers, filter presses, and heavy machinery since 2000."
+                    subtitle="Leading manufacturer of industrial oil processing plants, copra dryers, filter presses, and heavy machinery."
                     image={page?.hero_image || null}
                     breadcrumbs={[{ label: page?.title || 'About Us' }]}
                 />
