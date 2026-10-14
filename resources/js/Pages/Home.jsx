@@ -375,7 +375,7 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
                         <div>
                             <Badge>About Us</Badge>
                             <h2 className="text-3xl sm:text-4xl font-black text-[#0D2245] mt-4 leading-tight">
-                                24+ Years of <span className="text-amber-500">Industrial Excellence</span>
+                                16+ Years of <span className="text-amber-500">Industrial Excellence</span>
                             </h2>
                             <p className="mt-4 text-slate-600 leading-relaxed text-[15px]">
                                 {profile?.custom_attributes?.about_short ||
