@@ -208,7 +208,7 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
                                     <div className="flex flex-col items-center gap-3">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400/80 flex items-center gap-1.5">
                                             <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                            Certifications
+                                            Certifications & Memberships
                                         </span>
                                         <div className="flex flex-wrap items-center justify-center gap-3">
                                             {certs.map((ac, i) => (
