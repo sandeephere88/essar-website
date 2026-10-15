@@ -152,6 +152,170 @@ function HeroSlider({ banners }) {
         </section>
     );
 }
+/* ── Certifications Carousel ──────────────────────────────────── */
+function CertificationsCarousel({ items }) {
+    const [active, setActive] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
+    const timerRef = useRef(null);
+    const trackRef = useRef(null);
+
+    // Responsive detection
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
+
+    const count = items.length;
+
+    // Auto-advance
+    useEffect(() => {
+        if (count <= 1) return;
+        const interval = isMobile ? 3000 : 4000;
+        timerRef.current = setInterval(() => {
+            setActive(a => (a + 1) % count);
+        }, interval);
+        return () => clearInterval(timerRef.current);
+    }, [count, isMobile]);
+
+    const goTo = (idx) => {
+        clearInterval(timerRef.current);
+        setActive(idx);
+        const interval = isMobile ? 3000 : 4000;
+        timerRef.current = setInterval(() => {
+            setActive(a => (a + 1) % count);
+        }, interval);
+    };
+
+    const next = () => goTo((active + 1) % count);
+    const prev = () => goTo((active - 1 + count) % count);
+
+    // Card renderer
+    const renderCard = (ac, i) => (
+        <div key={i} className="flex items-center gap-2.5 bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.12] hover:border-amber-400/40 rounded-xl px-4 py-2.5 transition-all duration-200 group shrink-0">
+            {ac.logo
+                ? <img src={ac.logo} alt={ac.title} className="h-7 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity" />
+                : <span className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </span>
+            }
+            <span className="font-semibold text-[12.5px] text-white/85 group-hover:text-white transition-colors whitespace-nowrap">{ac.title}</span>
+        </div>
+    );
+
+    // Arrow button
+    const ArrowBtn = ({ onClick, direction, className = '' }) => (
+        <button
+            onClick={onClick}
+            aria-label={direction === 'left' ? 'Previous' : 'Next'}
+            className={`w-8 h-8 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 text-white flex items-center justify-center transition-all backdrop-blur-sm shrink-0 ${className}`}
+        >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d={direction === 'left' ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'} />
+            </svg>
+        </button>
+    );
+
+    if (count === 0) return null;
+
+    return (
+        <section className="bg-[#0D2245] border-b border-white/10 py-5 overflow-hidden">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                {/* Section label */}
+                <div className="flex justify-center mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400/80 flex items-center gap-1.5">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Certifications & Memberships
+                    </span>
+                </div>
+
+                {isMobile ? (
+                    /* ── MOBILE: Single item carousel ───────────────── */
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="flex items-center gap-3 w-full justify-center">
+                            {count > 1 && <ArrowBtn onClick={prev} direction="left" />}
+                            <div className="overflow-hidden flex-1 max-w-[320px]">
+                                <div
+                                    className="flex transition-transform duration-500 ease-in-out"
+                                    style={{ transform: `translateX(-${active * 100}%)` }}
+                                >
+                                    {items.map((ac, i) => (
+                                        <div key={i} className="w-full shrink-0 flex justify-center px-1">
+                                            {renderCard(ac, i)}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            {count > 1 && <ArrowBtn onClick={next} direction="right" />}
+                        </div>
+
+                        {/* Dots */}
+                        {count > 1 && (
+                            <div className="flex gap-1.5 justify-center">
+                                {items.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => goTo(i)}
+                                        aria-label={`Go to slide ${i + 1}`}
+                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    /* ── DESKTOP: All items in single row with carousel ── */
+                    <div className="relative flex items-center gap-3">
+                        {count > 3 && <ArrowBtn onClick={prev} direction="left" />}
+
+                        <div className="overflow-hidden flex-1" ref={trackRef}>
+                            <div
+                                className="flex gap-3 transition-transform duration-500 ease-in-out"
+                                style={{
+                                    transform: count > 3
+                                        ? `translateX(-${active * (100 / Math.min(count, 4))}%)`
+                                        : 'none',
+                                }}
+                            >
+                                {/* If few items, just center them */}
+                                {count <= 3 ? (
+                                    <div className="flex gap-3 justify-center w-full">
+                                        {items.map((ac, i) => renderCard(ac, i))}
+                                    </div>
+                                ) : (
+                                    items.map((ac, i) => (
+                                        <div key={i} className="shrink-0" style={{ minWidth: `calc(${100 / Math.min(count, 4)}% - 9px)` }}>
+                                            <div className="flex justify-center">
+                                                {renderCard(ac, i)}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                        {count > 3 && <ArrowBtn onClick={next} direction="right" />}
+
+                        {/* Desktop dots */}
+                        {count > 3 && (
+                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                                {items.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => goTo(i)}
+                                        aria-label={`Go to slide ${i + 1}`}
+                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+}
 
 /* ── Main Component ───────────────────────────────────────────── */
 export default function Home({ heroBanners = [], categories = [], featuredProducts = [], blogs = [], testimonials = [], accreditations = [], page = null }) {
@@ -195,68 +359,11 @@ export default function Home({ heroBanners = [], categories = [], featuredProduc
             {/* ── HERO ─────────────────────────────────────────────── */}
             <HeroSlider banners={heroBanners} />
 
-            {/* ── CERTIFICATIONS & MEMBERSHIPS TRUST BAR ───────────── */}
+            {/* ── CERTIFICATIONS & MEMBERSHIPS TRUST BAR (Carousel) ── */}
             {accreditations.length > 0 && (() => {
-                const certs = accreditations.filter(a => (a.type ?? 'certificate') === 'certificate');
-                const members = accreditations.filter(a => a.type === 'membership');
-                return (
-                    <section className="bg-[#0D2245] border-b border-white/10 py-5 overflow-hidden">
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <div className="flex flex-wrap items-start gap-x-10 gap-y-6 justify-center">
-                                {/* Certificates group */}
-                                {certs.length > 0 && (
-                                    <div className="flex flex-col items-center gap-3">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400/80 flex items-center gap-1.5">
-                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                            Certifications & Memberships
-                                        </span>
-                                        <div className="flex flex-wrap items-center justify-center gap-3">
-                                            {certs.map((ac, i) => (
-                                                <div key={i} className="flex items-center gap-2.5 bg-white/8 hover:bg-white/14 border border-white/12 hover:border-amber-400/40 rounded-xl px-4 py-2.5 transition-all duration-200 group">
-                                                    {ac.logo
-                                                        ? <img src={ac.logo} alt={ac.title} className="h-7 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity" />
-                                                        : <span className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
-                                                            <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                                        </span>
-                                                    }
-                                                    <span className="font-semibold text-[12.5px] text-white/85 group-hover:text-white transition-colors whitespace-nowrap">{ac.title}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+                const allItems = accreditations;
 
-                                {/* Divider */}
-                                {certs.length > 0 && members.length > 0 && (
-                                    <div className="hidden sm:block w-px self-stretch bg-white/15 my-1" />
-                                )}
-
-                                {/* Memberships group */}
-                                {members.length > 0 && (
-                                    <div className="flex flex-col items-center gap-3">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 flex items-center gap-1.5">
-                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
-                                            Memberships
-                                        </span>
-                                        <div className="flex flex-wrap items-center justify-center gap-3">
-                                            {members.map((ac, i) => (
-                                                <div key={i} className="flex items-center gap-2.5 bg-white/8 hover:bg-white/14 border border-white/12 hover:border-emerald-400/40 rounded-xl px-4 py-2.5 transition-all duration-200 group">
-                                                    {ac.logo
-                                                        ? <img src={ac.logo} alt={ac.title} className="h-7 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity" />
-                                                        : <span className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                                                            <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
-                                                        </span>
-                                                    }
-                                                    <span className="font-semibold text-[12.5px] text-white/85 group-hover:text-white transition-colors whitespace-nowrap">{ac.title}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </section>
-                );
+                return <CertificationsCarousel items={allItems} />;
             })()}
 
             {/* ── PRODUCT CATEGORIES ───────────────────────────────── */}
