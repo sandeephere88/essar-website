@@ -26,15 +26,32 @@ export default function AccreditationStripBlock({ data, bgStyle }) {
                         )}
                     </div>
                 )}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 items-center justify-items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 sm:gap-6 items-stretch justify-center">
                     {accreditations.map(a => (
-                        <div key={a.id} className="text-center p-2">
+                        <div key={a.id} className="h-full bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center text-center shadow-xs hover:shadow-md hover:border-amber-500/40 hover:-translate-y-0.5 transition-all duration-300 group">
                             {a.logo ? (
-                                <img src={storageUrl(a.logo)} alt={a.title || 'Accreditation'} className="h-12 sm:h-16 mx-auto mb-2 object-contain max-w-[140px]" />
+                                <div className="h-16 sm:h-20 w-full flex items-center justify-center mb-3">
+                                    <img
+                                        src={storageUrl(a.logo)}
+                                        alt={a.title || 'Accreditation'}
+                                        className="max-h-16 sm:max-h-20 w-auto max-w-[140px] sm:max-w-[160px] object-contain group-hover:scale-105 transition-all duration-300"
+                                    />
+                                </div>
                             ) : (
-                                <span className="text-3xl mb-2 block">🌟</span>
+                                <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-amber-50 group-hover:text-amber-500 transition-colors mb-3">
+                                    <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
                             )}
-                            <h4 className="font-bold text-slate-800 text-xs">{a.title}</h4>
+                            <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0D2245] transition-colors line-clamp-1">
+                                {a.title}
+                            </span>
+                            {a.description && (
+                                <span className="text-[11px] text-slate-500 mt-1 line-clamp-2 font-medium leading-tight">
+                                    {a.description}
+                                </span>
+                            )}
                         </div>
                     ))}
                 </div>

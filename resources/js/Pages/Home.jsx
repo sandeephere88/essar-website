@@ -182,7 +182,7 @@ function CertificationsCarousel({ items }) {
     const goTo = (idx) => {
         clearInterval(timerRef.current);
         setActive(idx);
-        const interval = isMobile ? 3000 : 4000;
+        const interval = isMobile ? 3500 : 4500;
         timerRef.current = setInterval(() => {
             setActive(a => (a + 1) % count);
         }, interval);
@@ -191,16 +191,32 @@ function CertificationsCarousel({ items }) {
     const next = () => goTo((active + 1) % count);
     const prev = () => goTo((active - 1 + count) % count);
 
-    // Card renderer
+    // Card renderer - vertical card matching client cards (logo top, text below)
     const renderCard = (ac, i) => (
-        <div key={i} className="flex items-center gap-2.5 bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.12] hover:border-amber-400/40 rounded-xl px-4 py-2.5 transition-all duration-200 group shrink-0">
-            {ac.logo
-                ? <img src={ac.logo} alt={ac.title} className="h-7 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity" />
-                : <span className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
-                    <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div key={i} className="h-full w-full bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center text-center shadow-xs hover:shadow-md hover:border-amber-500/40 hover:-translate-y-0.5 transition-all duration-300 group">
+            {ac.logo ? (
+                <div className="h-16 sm:h-20 w-full flex items-center justify-center mb-3">
+                    <img
+                        src={storageUrl(ac.logo)}
+                        alt={ac.title || 'Certification Logo'}
+                        className="max-h-16 sm:max-h-20 w-auto max-w-[140px] sm:max-w-[160px] object-contain group-hover:scale-105 transition-all duration-300"
+                    />
+                </div>
+            ) : (
+                <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-amber-50 group-hover:text-amber-500 transition-colors mb-3">
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            )}
+            <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0D2245] transition-colors line-clamp-1">
+                {ac.title}
+            </span>
+            {ac.description && (
+                <span className="text-[11px] text-slate-500 mt-1 line-clamp-2 font-medium leading-tight">
+                    {ac.description}
                 </span>
-            }
-            <span className="font-semibold text-[12.5px] text-white/85 group-hover:text-white transition-colors whitespace-nowrap">{ac.title}</span>
+            )}
         </div>
     );
 
@@ -209,7 +225,7 @@ function CertificationsCarousel({ items }) {
         <button
             onClick={onClick}
             aria-label={direction === 'left' ? 'Previous' : 'Next'}
-            className={`w-8 h-8 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 text-white flex items-center justify-center transition-all backdrop-blur-sm shrink-0 ${className}`}
+            className={`w-9 h-9 rounded-full bg-white hover:bg-slate-100 border border-slate-200 shadow-xs text-slate-700 hover:text-[#0D2245] flex items-center justify-center transition-all shrink-0 active:scale-95 ${className}`}
         >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d={direction === 'left' ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'} />
@@ -220,22 +236,24 @@ function CertificationsCarousel({ items }) {
     if (count === 0) return null;
 
     return (
-        <section className="bg-[#0D2245] border-b border-white/10 py-5 overflow-hidden">
+        <section className="bg-slate-50/70 border-b border-slate-200/80 py-10 sm:py-14 overflow-hidden">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Section label */}
-                <div className="flex justify-center mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400/80 flex items-center gap-1.5">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <div className="flex justify-center mb-6 sm:mb-8">
+                    <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 shadow-xs text-[#0D2245] text-xs font-bold uppercase tracking-wider">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                         Certifications & Memberships
                     </span>
                 </div>
 
                 {isMobile ? (
                     /* ── MOBILE: Single item carousel ───────────────── */
-                    <div className="flex flex-col items-center gap-3">
+                    <div className="flex flex-col items-center gap-4">
                         <div className="flex items-center gap-3 w-full justify-center">
                             {count > 1 && <ArrowBtn onClick={prev} direction="left" />}
-                            <div className="overflow-hidden flex-1 max-w-[320px]">
+                            <div className="overflow-hidden flex-1 max-w-[280px]">
                                 <div
                                     className="flex transition-transform duration-500 ease-in-out"
                                     style={{ transform: `translateX(-${active * 100}%)` }}
@@ -258,35 +276,39 @@ function CertificationsCarousel({ items }) {
                                         key={i}
                                         onClick={() => goTo(i)}
                                         aria-label={`Go to slide ${i + 1}`}
-                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'}`}
+                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-500' : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'}`}
                                     />
                                 ))}
                             </div>
                         )}
                     </div>
                 ) : (
-                    /* ── DESKTOP: All items in single row with carousel ── */
-                    <div className="relative flex items-center gap-3">
+                    /* ── DESKTOP: All items in single row with carousel if > 3 ── */
+                    <div className="relative flex items-center justify-center gap-3">
                         {count > 3 && <ArrowBtn onClick={prev} direction="left" />}
 
                         <div className="overflow-hidden flex-1" ref={trackRef}>
                             <div
-                                className="flex gap-3 transition-transform duration-500 ease-in-out"
+                                className="flex gap-5 sm:gap-6 transition-transform duration-500 ease-in-out"
                                 style={{
                                     transform: count > 3
                                         ? `translateX(-${active * (100 / Math.min(count, 4))}%)`
                                         : 'none',
                                 }}
                             >
-                                {/* If few items, just center them */}
+                                {/* If <= 3 items, center them neatly in a grid */}
                                 {count <= 3 ? (
-                                    <div className="flex gap-3 justify-center w-full">
-                                        {items.map((ac, i) => renderCard(ac, i))}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6 justify-center w-full max-w-4xl mx-auto">
+                                        {items.map((ac, i) => (
+                                            <div key={i} className="h-full">
+                                                {renderCard(ac, i)}
+                                            </div>
+                                        ))}
                                     </div>
                                 ) : (
                                     items.map((ac, i) => (
-                                        <div key={i} className="shrink-0" style={{ minWidth: `calc(${100 / Math.min(count, 4)}% - 9px)` }}>
-                                            <div className="flex justify-center">
+                                        <div key={i} className="shrink-0" style={{ minWidth: `calc(${100 / Math.min(count, 4)}% - 18px)` }}>
+                                            <div className="h-full flex justify-center">
                                                 {renderCard(ac, i)}
                                             </div>
                                         </div>
@@ -299,13 +321,13 @@ function CertificationsCarousel({ items }) {
 
                         {/* Desktop dots */}
                         {count > 3 && (
-                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
                                 {items.map((_, i) => (
                                     <button
                                         key={i}
                                         onClick={() => goTo(i)}
                                         aria-label={`Go to slide ${i + 1}`}
-                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'}`}
+                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-500' : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'}`}
                                     />
                                 ))}
                             </div>
