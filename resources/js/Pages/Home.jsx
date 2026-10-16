@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import SeoHead from '@/Components/SeoHead';
@@ -154,42 +154,109 @@ function HeroSlider({ banners }) {
 }
 /* ── Certifications Carousel ──────────────────────────────────── */
 function CertificationsCarousel({ items }) {
-    const [active, setActive] = useState(0);
-    const [isMobile, setIsMobile] = useState(false);
-    const timerRef = useRef(null);
-    const trackRef = useRef(null);
-
-    // Responsive detection
-    useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < 768);
-        check();
-        window.addEventListener('resize', check);
-        return () => window.removeEventListener('resize', check);
-    }, []);
-
     const count = items.length;
+    if (count === 0) return null;
 
-    // Auto-advance
+    // Responsive visible count
+    const [visibleCount, setVisibleCount] = useState(1);
+    const [isPaused, setIsPaused] = useState(false);
+
+    // Determine visibleCount based on screen width
     useEffect(() => {
-        if (count <= 1) return;
-        const interval = isMobile ? 3000 : 4000;
-        timerRef.current = setInterval(() => {
-            setActive(a => (a + 1) % count);
-        }, interval);
-        return () => clearInterval(timerRef.current);
-    }, [count, isMobile]);
+        const updateVisible = () => {
+            const w = window.innerWidth;
+            if (w < 640) {
+                setVisibleCount(1);
+            } else if (w < 768) {
+                setVisibleCount(Math.min(count, 2));
+            } else if (w < 1024) {
+                setVisibleCount(Math.min(count, 3));
+            } else {
+                setVisibleCount(Math.min(count, 4));
+            }
+        };
+        updateVisible();
+        window.addEventListener('resize', updateVisible);
+        return () => window.removeEventListener('resize', updateVisible);
+    }, [count]);
 
-    const goTo = (idx) => {
-        clearInterval(timerRef.current);
-        setActive(idx);
-        const interval = isMobile ? 3500 : 4500;
-        timerRef.current = setInterval(() => {
-            setActive(a => (a + 1) % count);
-        }, interval);
+    // Ensure base list has enough items so that a single set fills visibleCount + buffer
+    const baseList = useMemo(() => {
+        let list = [...items];
+        while (list.length < 8) {
+            list = [...list, ...items];
+        }
+        return list;
+    }, [items]);
+
+    const L = baseList.length;
+
+    // 3 sets: Set 0 (left buffer), Set 1 (middle active), Set 2 (right buffer)
+    const extendedItems = useMemo(() => {
+        return [...baseList, ...baseList, ...baseList];
+    }, [baseList]);
+
+    const [currentIndex, setCurrentIndex] = useState(L);
+    const [isTransitioning, setIsTransitioning] = useState(true);
+
+    // Keep currentIndex synced if L changes
+    useEffect(() => {
+        setCurrentIndex(L);
+    }, [L]);
+
+    // Re-enable transition after seamless instant jump
+    useEffect(() => {
+        if (!isTransitioning) {
+            const id1 = requestAnimationFrame(() => {
+                const id2 = requestAnimationFrame(() => {
+                    setIsTransitioning(true);
+                });
+                return () => cancelAnimationFrame(id2);
+            });
+            return () => cancelAnimationFrame(id1);
+        }
+    }, [isTransitioning]);
+
+    const next = () => {
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev + 1);
     };
 
-    const next = () => goTo((active + 1) % count);
-    const prev = () => goTo((active - 1 + count) % count);
+    const prev = () => {
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev - 1);
+    };
+
+    const handleTransitionEnd = () => {
+        // When we slide into Set 2 (past Set 1), wrap seamlessly back into Set 1
+        if (currentIndex >= 2 * L) {
+            setIsTransitioning(false);
+            setCurrentIndex(currentIndex - L);
+        }
+        // When we slide backwards into Set 0 (before Set 1), wrap seamlessly into Set 1
+        else if (currentIndex < L) {
+            setIsTransitioning(false);
+            setCurrentIndex(currentIndex + L);
+        }
+    };
+
+    // Auto-advance with pause on hover
+    useEffect(() => {
+        if (count <= 1 || isPaused) return;
+        const timer = setInterval(() => {
+            next();
+        }, 3500);
+        return () => clearInterval(timer);
+    }, [count, isPaused]);
+
+    // Calculate current active dot (0 to count - 1)
+    const activeDot = ((currentIndex % count) + count) % count;
+
+    const goTo = (dotIndex) => {
+        const diff = dotIndex - activeDot;
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev + diff);
+    };
 
     // Card renderer - vertical card matching client cards (logo top, text below)
     const renderCard = (ac, i) => (
@@ -233,8 +300,6 @@ function CertificationsCarousel({ items }) {
         </button>
     );
 
-    if (count === 0) return null;
-
     return (
         <section className="bg-slate-50/70 border-b border-slate-200/80 py-10 sm:py-14 overflow-hidden">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -248,90 +313,50 @@ function CertificationsCarousel({ items }) {
                     </span>
                 </div>
 
-                {isMobile ? (
-                    /* ── MOBILE: Single item carousel ───────────────── */
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="flex items-center gap-3 w-full justify-center">
-                            {count > 1 && <ArrowBtn onClick={prev} direction="left" />}
-                            <div className="overflow-hidden flex-1 max-w-[280px]">
+                <div
+                    className="relative flex items-center justify-center gap-3 sm:gap-4"
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                >
+                    {count > 1 && <ArrowBtn onClick={prev} direction="left" />}
+
+                    <div className="overflow-hidden flex-1">
+                        <div
+                            className="flex -mx-2.5 sm:-mx-3"
+                            onTransitionEnd={handleTransitionEnd}
+                            style={{
+                                transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+                                transition: isTransitioning ? 'transform 500ms ease-in-out' : 'none',
+                            }}
+                        >
+                            {extendedItems.map((ac, idx) => (
                                 <div
-                                    className="flex transition-transform duration-500 ease-in-out"
-                                    style={{ transform: `translateX(-${active * 100}%)` }}
+                                    key={idx}
+                                    className="shrink-0 px-2.5 sm:px-3"
+                                    style={{ width: `${100 / visibleCount}%` }}
                                 >
-                                    {items.map((ac, i) => (
-                                        <div key={i} className="w-full shrink-0 flex justify-center px-1">
-                                            {renderCard(ac, i)}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            {count > 1 && <ArrowBtn onClick={next} direction="right" />}
-                        </div>
-
-                        {/* Dots */}
-                        {count > 1 && (
-                            <div className="flex gap-1.5 justify-center">
-                                {items.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => goTo(i)}
-                                        aria-label={`Go to slide ${i + 1}`}
-                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-500' : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'}`}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    /* ── DESKTOP: All items in single row with carousel if > 3 ── */
-                    <div className="relative flex items-center justify-center gap-3">
-                        {count > 3 && <ArrowBtn onClick={prev} direction="left" />}
-
-                        <div className="overflow-hidden flex-1" ref={trackRef}>
-                            <div
-                                className="flex gap-5 sm:gap-6 transition-transform duration-500 ease-in-out"
-                                style={{
-                                    transform: count > 3
-                                        ? `translateX(-${active * (100 / Math.min(count, 4))}%)`
-                                        : 'none',
-                                }}
-                            >
-                                {/* If <= 3 items, center them neatly in a grid */}
-                                {count <= 3 ? (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6 justify-center w-full max-w-4xl mx-auto">
-                                        {items.map((ac, i) => (
-                                            <div key={i} className="h-full">
-                                                {renderCard(ac, i)}
-                                            </div>
-                                        ))}
+                                    <div className="h-full flex justify-center">
+                                        {renderCard(ac, idx)}
                                     </div>
-                                ) : (
-                                    items.map((ac, i) => (
-                                        <div key={i} className="shrink-0" style={{ minWidth: `calc(${100 / Math.min(count, 4)}% - 18px)` }}>
-                                            <div className="h-full flex justify-center">
-                                                {renderCard(ac, i)}
-                                            </div>
-                                        </div>
-                                    ))
-                                )}
-                            </div>
+                                </div>
+                            ))}
                         </div>
+                    </div>
 
-                        {count > 3 && <ArrowBtn onClick={next} direction="right" />}
+                    {count > 1 && <ArrowBtn onClick={next} direction="right" />}
+                </div>
 
-                        {/* Desktop dots */}
-                        {count > 3 && (
-                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
-                                {items.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => goTo(i)}
-                                        aria-label={`Go to slide ${i + 1}`}
-                                        className={`transition-all duration-300 rounded-full ${i === active ? 'w-5 h-1.5 bg-amber-500' : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'}`}
-                                    />
-                                ))}
-                            </div>
-                        )}
+                {/* Dots indicator */}
+                {count > 1 && (
+                    <div className="flex gap-1.5 justify-center mt-6">
+                        {items.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => goTo(i)}
+                                aria-label={`Go to slide ${i + 1}`}
+                                className={`transition-all duration-300 rounded-full ${i === activeDot ? 'w-5 h-1.5 bg-amber-500' : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'}`}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
