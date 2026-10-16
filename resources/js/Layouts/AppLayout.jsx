@@ -83,21 +83,14 @@ export default function AppLayout({ children }) {
                 <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 h-[64px] sm:h-[72px]">
 
                     {/* Logo */}
-                    <Link href={route('home')} className="flex items-center gap-3 shrink-0 group">
+                    <Link href={route('home')} className="flex items-center shrink-0">
                         {profile?.logo && !logoError ? (
-                            <div className="flex items-center gap-3">
-                                <img src={storageUrl(profile.logo)} alt={name}
-                                    className="h-10 sm:h-11 w-auto object-contain max-w-[180px]"
-                                    onError={() => setLogoError(true)} />
-                                <div className="leading-tight">
-                                    <span className="block text-[16px] sm:text-[17.5px] font-black text-[#0D2245] uppercase tracking-tight leading-none group-hover:text-amber-600 transition-colors">
-                                        Essar <span className="text-amber-500">Techins</span>
-                                    </span>
-                                    <span className="block text-[8.5px] sm:text-[9.5px] text-slate-500 font-bold mt-1 tracking-wider uppercase">
-                                        OIL MILL MACHINERIES AND SPARES
-                                    </span>
-                                </div>
-                            </div>
+                            <img
+                                src={storageUrl(profile.logo)}
+                                alt={name}
+                                className="h-10 sm:h-12 w-auto object-contain max-w-[220px] sm:max-w-[260px]"
+                                onError={() => setLogoError(true)}
+                            />
                         ) : (
                             <div className="flex items-center gap-2.5">
                                 {/* Gear + ET monogram icon */}
@@ -216,20 +209,14 @@ export default function AppLayout({ children }) {
                     {/* Brand Column */}
                     <div className="lg:col-span-4 space-y-5">
                         {profile?.logo && !footerLogoError ? (
-                            <div className="flex items-center gap-3">
+                            <Link href={route('home')} className="inline-block">
                                 <img
                                     src={storageUrl(profile.logo)}
                                     alt={name}
-                                    className="h-10 sm:h-11 w-auto object-contain max-w-[180px] bg-white/95 p-1 rounded-lg shadow-sm"
+                                    className="h-10 sm:h-12 w-auto object-contain max-w-[220px] sm:max-w-[260px] bg-white p-1.5 rounded-lg shadow-sm"
                                     onError={() => setFooterLogoError(true)}
                                 />
-                                <div>
-                                    <span className="block text-[16px] font-black uppercase tracking-tight text-white">
-                                        Essar <span className="text-amber-400">Techins</span>
-                                    </span>
-                                    <span className="block text-[9.5px] text-white/50 tracking-widest uppercase font-medium">OIL MILL MACHINERIES AND SPARES</span>
-                                </div>
-                            </div>
+                            </Link>
                         ) : (
                             <div className="flex items-center gap-3">
                                 <div className="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
